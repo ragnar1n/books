@@ -1,8 +1,9 @@
 const form=document.querySelector('#addBook')
-
+const bookList=document.querySelector('#book-list')
 
 
 form.addEventListener('submit', addBook)
+bookList.addEventListener('click',deleteBook)
 
 
 function addBook(event){
@@ -41,7 +42,6 @@ function addBook(event){
     ul1.appendChild(li3)
     ul.appendChild(ul1)
 
-    // console.log(li)
     //delete input value from form input fields
     titleInput.value=''
     authorInput.value=''
@@ -49,3 +49,11 @@ function addBook(event){
     event.preventDefault()
 }
 
+function deleteBook(event){
+    if (event.target.textContent==='x'){
+        if(confirm('Are you sure?')){
+            event.target.parentElement.closest('ul').remove()
+        }
+    }
+
+}
