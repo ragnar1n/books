@@ -1,59 +1,85 @@
-const form=document.querySelector('#addBook')
-const bookList=document.querySelector('#book-list')
+class Book{
+    constructor(title,author,isbn) {
+        this.title=title
+        this.author=author
+        this.isbn=isbn
+    }
+}
+class UI{
+    static LSbooks(){
+        const books=LS.bookStorage()
+        books.forEach((book)=>UI.addBookToLS(book))
+    }
+    static addBookToLS(book){
+        const bookList=document.querySelector('#book-list')
+        const tr=document.createElement('tr')
 
+        tr.innerHTML =`
+        <td>${book.title}</td>
+        <td>${book.author}</td>
+        <td>${book.isbn}</td>
+        <td><a href="#" class="del">x</a></td>`
+        bookList.appendChild(tr)
+    }
+    static delBook(a){
+        if (a.classList.contains('del')){
+            if (confirm('Are you sure?')){
+                a.parentElement.parentElement.remove()
+            }
+        }
+    }
+    static clear() {
+        document.querySelector('#title').value = '';
+        document.querySelector('#author').value = '';
+        document.querySelector('#isbn').value = '';
+    }
+}
+class LS {
+    static bookStorage() {
+        let books
+
+        if (localStorage.getItem('books') === null) {
+            books = []
+        } else {
+            books = JSON.parse(localStorage.getItem('books'))
+        }
+        return books
+    }
+    static addBook(book){
+        let books=LS.bookStorage()
+        books.push(book)
+        localStorage.setItem('books',JSON.stringify(books))
+    }
+    static deleteBookFromLS(isbn){
+        let books=LS.bookStorage()
+        books.forEach((book,index)=>{
+            if (book.isbn===isbn){
+                books.splice(index,1)
+            }
+            })
+        localStorage.setItem('books',JSON.stringify(books))
+    }
+}
+
+const form=document.querySelector('#addBook')
 
 form.addEventListener('submit', addBook)
-bookList.addEventListener('click',deleteBook)
-
+document.addEventListener('DOMContentLoaded',UI.LSbooks)
 
 function addBook(event){
     // get form input values
-    const titleInput=document.querySelector('#title')
-    const authorInput=document.querySelector('#author')
-    const isbnInput=document.querySelector('#isbn')
+    const title=document.querySelector('#title').value
+    const author=document.querySelector('#author').value
+    const isbn=document.querySelector('#isbn').value
 
-    //create ul, li items and x link
-    const ul1=document.createElement('ul')
-    ul1.className='collection'
-
-    const li=document.createElement('li')
-    li.appendChild(document.createTextNode(titleInput.value))
-    li.className='col s12 m4 collection-item'
-
-    const li2=document.createElement('li')
-    li2.appendChild(document.createTextNode(authorInput.value))
-    li2.className='col s12 m4 collection-item'
-
-    const li3=document.createElement('li')
-    li3.appendChild(document.createTextNode(isbnInput.value))
-    li3.className='col s12 m4 collection-item'
-
-    const x=document.createElement('a')
-    x.appendChild(document.createTextNode('x'))
-    x.setAttribute('href','#')
-    x.className='secondary-content'
-
-    li3.appendChild(x)
-
-    const ul=document.querySelector('ul')
-
-    ul1.appendChild(li)
-    ul1.appendChild(li2)
-    ul1.appendChild(li3)
-    ul.appendChild(ul1)
-
-    //delete input value from form input fields
-    titleInput.value=''
-    authorInput.value=''
-    isbnInput.value=''
+    book=new Book(title,author,isbn)
+    UI.addBookToLS(book)
+    LS.addBook(book)
+    UI.clear()
     event.preventDefault()
 }
 
-function deleteBook(event){
-    if (event.target.textContent==='x'){
-        if(confirm('Are you sure?')){
-            event.target.parentElement.closest('ul').remove()
-        }
-    }
-
-}
+document.querySelector('#book-list').addEventListener('click',(e)=>{
+    UI.delBook(e.target)
+    LS.deleteBookFromLS(e.target.parentElement.previousElementSibling.textContent)
+})

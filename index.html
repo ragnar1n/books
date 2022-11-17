@@ -7,10 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <title>Title</title>
     <style>
-        .c{
-            display: flex;
-            column-count: 3;
-        }
         p{
             margin-left: auto;
             margin-right: auto;
@@ -46,32 +42,21 @@
                     <input type="submit" class="btn" value="SUBMIT">
                 </div>
             </form>
-            <div class="c">
-                <p><b>Title</b></p>
-                <p><b>Author</b></p>
-                <p><b>ISBN</b></p>
-            </div>
-            <div>
-            <ul id="book-list">
-                <ul class="collection">
-                    <li class="col s12 m4 collection-item">Silmarillion
-                    </li>
-                    <li class="col s12 m4 collection-item">J.R.R. Tolkien
-                    </li>
-                    <li class="col s12 m4 collection-item">787878
-                        <a href="#" class="secondary-content">x</a>
-                    </li>
-                </ul>
-                <ul class="collection">
-                    <li class="col s12 m4 collection-item">Naksitrallid
-                    </li>
-                    <li class="col s12 m4 collection-item">Eno Raud
-                    </li>
-                    <li class="col s12 m4 collection-item">123788
-                        <a href="#" class="secondary-content">x</a>
-                    </li>
-                </ul>
-            </ul>
+
+            <div class="card-action">
+                <h5>Books</h5>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>ISBN</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="book-list"></tbody>
+                </table>
+
             </div>
         </div>
     </div>
